@@ -1,0 +1,18 @@
+<rool>
+	<file>
+		<name>file name 1</name>
+		<path>/resources/1.png</path>
+	</file>
+	<file>
+		<name>file name 2</name>
+		<path>/resources/2.png</path>
+	</file>
+	<file>
+		<name>file name 3</name>
+		<path>/resources/3.png</path>
+	</file>
+	<file>
+		<name>file name 3</name>
+		<path>/resources/4.png</path>
+	</file>
+</rool>

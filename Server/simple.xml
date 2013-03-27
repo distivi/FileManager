@@ -1,18 +1,94 @@
 <rool>
+
 	<file>
-		<name>file name 1</name>
-		<path>/resources/1.png</path>
+
+			<name>
+			file name 1
+		</name>
+
+			<path>
+			/resources/1.png
+		</path>
+	
 	</file>
 	<file>
-		<name>file name 2</name>
-		<path>/resources/2.png</path>
+			<name>file name 2
+		</name>
+			<path>/resources/2.png
+		</path>
+	
 	</file>
 	<file>
-		<name>file name 3</name>
-		<path>/resources/3.png</path>
+			<name>file name 3
+		</name>
+			<path>/resources/3.png</path>
 	</file>
 	<file>
-		<name>file name 3</name>
-		<path>/resources/4.png</path>
+			<name>file name 3</name>
+			<path>/resources/4.png</path>
 	</file>
 </rool>
+
+
+'<root>
+<file>
+	<id>0</id>
+	<name>File</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/File</path>
+</file>
+<file>
+	<id>1</id>
+	<name>new</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/new</path>
+</file>
+<file>
+	<id>2</id>
+	<name>someFile1</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/someFile1</path>
+</file>
+<file>
+	<id>3</id>
+	<name>someFile2</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/someFile2</path>
+</file>
+<file>
+	<id>4</id>
+	<name>4.jpg</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/4.jpg</path>
+</file>
+<file>
+	<id>5</id>
+	<name>Screen Shot 2013-03-26 at 4.06.42 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.06.42 PM.png</path>
+</file>
+<file>
+	<id>6</id>
+	<name>Screen Shot 2013-03-26 at 4.07.14 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.07.14 PM.png</path>
+</file>
+<file>
+	<id>7</id>
+	<name>Screen Shot 2013-03-26 at 4.07.31 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.07.31 PM.png</path>
+</file>
+<file>
+	<id>8</id>
+	<name>Screen Shot 2013-03-26 at 4.08.13 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.08.13 PM.png</path>
+</file>
+<file>
+	<id>9</id>
+	<name>Screen Shot 2013-03-26 at 4.09.20 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.09.20 PM.png</path>
+</file>
+<file>
+	<id>10</id>
+	<name>Screen Shot 2013-03-26 at 4.09.40 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.09.40 PM.png</path>
+</file>
+<file>
+	<id>11</id>
+	<name>Screen Shot 2013-03-26 at 4.09.55 PM.png</name>
+	<path>/Users/sdymedyuk/work/python/FileManager/Server/resources2/resources/Screen Shot 2013-03-26 at 4.09.55 PM.png</path>
+</file>
+</root>'

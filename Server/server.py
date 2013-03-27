@@ -1,78 +1,74 @@
 # -*- coding: utf-8 -*-
+#!/bin/python
+import asyncore
+import socket
 import os
-#import xmp_parser
+import sys
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 import string
+import re
+import pickle
+
+class MainServerSocket(asyncore.dispatcher):
+  def __init__(self, port):
+    asyncore.dispatcher.__init__(self)    
+    self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = '127.0.0.1'    
+    try:      
+      self.bind((host,port))      
+      print("Socket binded")
+      self.listen(1000)
+    except:
+      print("can't bind to socket ",host,':',port)
+      sys.exit(0)     
+
+  def handle_accept(self):
+    newSocket, address = self.accept()
+    print("Connected from",address)
+    SecondaryServerSocket(newSocket)
 
 
-class Server(object):
-  # Singleton
-  #_instance = None
-  #def __new__(self, *args, **kwargs):       
-    #if not self._instance:
-      #self._instance = super(Server, self).__new__(self)
-    #return self._instance
-#
-  resourcesDirName = None
-   
-  def __init__(self,arg = None):
-    super(Server,self).__init__()
+class SecondaryServerSocket(asyncore.dispatcher_with_send):
+  def handle_read(self):
+    receivedData = self.recv(1024**2)
+    if receivedData:
+      print(receivedData)
+      if len(receivedData) < 10:
+        self.sendXML()
+      else:
+        self.sendPhotos()  
+    else:
+      self.close()
 
-    self.resourcesDirName = "resources2"
-    resourcesPath = os.path.join(os.getcwd(),self.resourcesDirName)
-    
-    if not os.path.isdir(resourcesPath):      
-      os.makedirs(resourcesPath)
+  def sendXML(self):
+    xmlString = "<root><name>ololo</name></root>"
+    self.send(pickle.dumps(xmlString))
+ 
 
-  def getXMLFile(self):    
-    root = Element('root')
-    files = self.getFilesFromResources()
-    i = 0
-    for tmpFile in files:
-      nodeFile = SubElement(root,'file')
-      
-      nodeFileId = SubElement(nodeFile,'id')
-      nodeFileId.text = str(i)
+  def sendPhotos(self): 
+    dict1 = {"name1":"image1","name2":"image2"}
+    image = open("./resources/4.jpg",'rb')    
+    data = image.read()
+    print(data)
+    image.close()
+    dict1["bytes_image"] = data
+    self.send(pickle.dumps(dict1))
+    pass
 
-      nodeFileName = SubElement(nodeFile,'name')
-      nodeFileName.text = tmpFile.split('/')[-1]
+  def handle_close(self):
+    print("Disconnected from: ",self.getpeername())  
 
-      nodeFilePath = SubElement(nodeFile,'path')
-      nodeFilePath.text = tmpFile
-
-      nodeFilePath = SubElement(nodeFile,'description')
-      nodeFilePath.text = "default description"
-      i += 1
-
-    xmlFileName = self.resourcesDirName + '.xml'
-    
-
-    print(xmlFile)
-
-    
-
-  def getFilesFromResources(self):
-    resourcesPath = os.path.join(os.getcwd(),self.resourcesDirName)
-    resources = []
-    for r,d,f in os.walk(resourcesPath):
-      for files in f:
-        resources.append(os.path.join(r,files))
-    return resources
 
 
 if __name__ == '__main__':
-  init_dict = {"ip":"127.0.0.1"}
-  s = Server(init_dict)
-  s.getXMLFile()
-  
+  if len(sys.argv) < 2:
+    print("You must write port for socket. For example: \"$ python server.py 7000\"")
+    sys.exit(1)
+  else:    
+    if re.match('^[0-9]+$',sys.argv[1]):
+      MainServerSocket(int(sys.argv[1]))
+      asyncore.loop()
+    else:
+      print("Socket port must be a number")  
 
-  
-
-
-#for r,d,f in os.walk("./resources"):
-   # for files in f:
-    	#print files
-    #	print os.path.join(r,files)
-        #if files.endswith(".txt"):
-          #   print os.path.join(r,files)
 

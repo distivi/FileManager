@@ -1,0 +1,39 @@
+def Connect():
+	global Connected, Socket;
+
+	if( Connected == False ):
+		Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
+		Socket.connect(('localhost', 4001));
+		print "Connected to server";
+		Connected = True;
+	else:
+		print "Allready connected to server";
+
+def Disconnect():
+	global Connected, Socket;
+
+	if( Connected == True ):
+		Socket.shutdown(2);
+		Socket.close();
+		Socket = "";
+		print "Disconnected from server";
+		Connected = False;
+	else:
+		print "Not connected to server";
+
+def Exit():
+	global Connected, Socket;
+
+	if( Connected == True ):
+		Socket.close();
+	print "We zijn klaar";
+	sys.exit();
+
+def Receive():
+	global Connected, Socket;
+
+	if( Connected == True ):
+		Received = Socket.recv(8192);
+		print "Received: ", Received;
+	else:
+		print "Not connected to server";

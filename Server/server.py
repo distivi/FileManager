@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 #!/bin/python
+# -*- coding: utf-8 -*-
 import asyncore
 import socket
 import os
 import sys
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 import string
-import re
+from re import match
 import pickle
+from api import *
 
 class MainServerSocket(asyncore.dispatcher):
   def __init__(self, port):
@@ -29,31 +29,25 @@ class MainServerSocket(asyncore.dispatcher):
 
 
 class SecondaryServerSocket(asyncore.dispatcher_with_send):
+  def __init__(self,socket_):
+    super(SecondaryServerSocket,self).__init__(socket_)    
+    self.api_manger = Api(self)
+
   def handle_read(self):
     receivedData = self.recv(1024**2)
     if receivedData:
-      print(receivedData)
-      if len(receivedData) < 10:
-        self.sendXML()
-      else:
-        self.sendPhotos()  
+      self.api_manger.receiveData(receivedData)
     else:
       self.close()
 
-  def sendXML(self):
-    xmlString = "<root><name>ololo</name></root>"
-    self.send(pickle.dumps(xmlString))
- 
-
-  def sendPhotos(self): 
-    dict1 = {"name1":"image1","name2":"image2"}
-    image = open("./resources/4.jpg",'rb')    
-    data = image.read()
-    print(data)
-    image.close()
-    dict1["bytes_image"] = data
-    self.send(pickle.dumps(dict1))
-    pass
+  def send_data(self, data):
+    if type(data) == type(bytes("",'utf-8')):
+      print("Binary data ",data)
+      self.send(data)
+      self.send(bytes('','utf-8'))
+    else:
+      print(type(data))
+      print("Can send not binary format")
 
   def handle_close(self):
     print("Disconnected from: ",self.getpeername())  
@@ -65,7 +59,7 @@ if __name__ == '__main__':
     print("You must write port for socket. For example: \"$ python server.py 7000\"")
     sys.exit(1)
   else:    
-    if re.match('^[0-9]+$',sys.argv[1]):
+    if match('^[0-9]+$',sys.argv[1]):
       MainServerSocket(int(sys.argv[1]))
       asyncore.loop()
     else:

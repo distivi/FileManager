@@ -18,8 +18,7 @@ class ResourcesManager(object):
 		if not os.path.isdir(self.resourcesPath):
 			os.makedirs(self.resourcesPath)
 
-	def getResourcesXMLData(self):
-		print("getResourcesXMLData")		
+	def getResourcesXMLData(self):		
 		xmlData = None			
 		if os.path.exists(os.path.join(os.getcwd(),self.resourcesXML)):
 			xmlFile = open(self.resourcesXML,'rb')
@@ -60,6 +59,30 @@ class ResourcesManager(object):
 			for files in f:
 				resources.append(os.path.join(r,files))
 		return resources
+
+	def getFilesDataFromList(self,list):
+		xmlFilesData = self.getResourcesXMLData()
+		strData = xmlFilesData.decode()
+		root = ET.fromstring(strData)
+		fileInfoList = []
+		
+		for file_id in list:
+			for fileNode in root:
+				if fileNode[0].text == file_id or fileNode[1].text == file_id: # compare ID from xml
+					fileDict = {'name':fileNode[1].text,'path':fileNode[2].text}
+					fileInfoList.append(fileDict)
+					break
+
+		returnedDataList = []
+		for oneFileInfo in fileInfoList:
+			filePath = oneFileInfo['path']
+			print(filePath)
+			tmpFile = open(filePath,'rb')
+			tmpData = tmpFile.read()			
+			returnedDataList.append({'name':oneFileInfo['name'],'data':tmpData})
+			tmpFile.close()
+
+		return returnedDataList
 
 if __name__ == '__main__':
 	rm = ResourcesManager()

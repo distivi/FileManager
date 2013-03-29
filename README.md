@@ -1,9 +1,16 @@
 FileManager
 ===========
 
+Author: Stas Dymedyuk
+
 File manager with client and server.
-Programming Language: Python(v3.3.0:bd8afb90ebf2, Sep 29 2012, 01:25:11)
-Checked on OS: 	Mac OS X Mountine Lion
+To run Server, go to Server folder and run server.py
+To run Client, go to Client folder and run client.py
+
+Programming Language: Python(v3.3.0, Sep 29 2012, 01:25:11)
+Checked on OS:
+	- Mac OS X Mountine Lion
+	- Mac OS X Lion
 
 Help literature:
 * python docs for v3.3.0	http://docs.python.org/3.3/library/functions.html

@@ -3,6 +3,7 @@
 
 import pickle
 import re
+import base64
 import xml.etree.ElementTree as ET
 from resources_manager import ResourcesManager
 
@@ -16,19 +17,8 @@ class Api:
 		output_data = self.queryParser(data)
 
 		send_fun = getattr(self.delegate, 'send_data')
-		if send_fun:
-			print(len(output_data))
-			print('\n\n\n\n\n\n',output_data,'\n\n\n\n')
-			send_fun(output_data)
-			'''
-			if (len(data) < 5):
-				xmlData = self.resources_manager.getResourcesXMLData()
-				print(output_data)
-				#fun(xmlData)
-			else:
-				print("send images")
-				fun(pickle.dumps(["123412","asdfasdf"]))
-			'''
+		if send_fun:			
+			send_fun(output_data)			
 
 	def queryParser(self, data):	
 		strQuery = data.decode()
@@ -37,11 +27,18 @@ class Api:
 			return self.help()
 		elif re.match('^\s*files info\s*$',strQuery):
 			return self.resources_manager.getResourcesXMLData()
-		elif re.match('^(\s*\d+\s*,)+\s*\d+\s*',strQuery):
+		#^([0-9a-zA-Z\._\- ]+,+)+[0-9a-zA-Z\._\- ]+$
+		elif re.match('^([0-9a-zA-Z\._\- ]+,+)+[0-9a-zA-Z\._\- ]+$|^[0-9a-zA-Z\.\-_ ]+$',strQuery):
 			return self.photosData(strQuery)
 		else:
-			return bytes("Wrong query, try type \"Help\"",'utf-8')
-			
+			return self.wrongQuery()
+
+	def wrongQuery(self):
+		root = ET.Element('root')
+		root.attrib = {'ID':'SERVER_EXEPTION'}
+		root.text = "Wrong query, try type \"Help\""
+		xmlData = ET.tostring(root, encoding="utf-8")
+		return xmlData	
 
 	def help(self):
 		root = ET.Element('root')
@@ -53,7 +50,7 @@ class Api:
 		nodeGetFilesInfo.text = "To get files info send string:\"files info\""
 		
 		nodeDownloadFiles = ET.SubElement(root,'download_files')
-		nodeDownloadFiles.text = "To download files send file name's ot id's separated by commas:"
+		nodeDownloadFiles.text = "To download files send file's name or id separated by commas:"
 		
 		xmlData = ET.tostring(root, encoding="utf-8")
 		return xmlData
@@ -61,17 +58,35 @@ class Api:
 
 	def photosData(self,inputString):
 		newstr = re.sub(',{1,}',',',inputString)		
-		newstr = re.sub(' {1,}','',newstr)		
+		#newstr = re.sub(' {1,}','',newstr)		
 		fileIDs = re.split(',',newstr)
-		print(fileIDs)
-		return bytes('ololo','utf-8')
-'''
-		dict1 = {"name1":"image1","name2":"image2"}
-		image = open("./resources/4.jpg",'rb')	
-		data = image.read()
-		print(data)
-		image.close()
-		dict1["bytes_image"] = data
-		#self.send(pickle.dumps(dict1))
+		finifhedFileIds = []
+		for fileId in fileIDs:
+			if re.match('^\d+\-\d+$',fileId):
+				rangeIds = fileId.split('-')				
+				for newId in range(int(rangeIds[0]),int(rangeIds[1]) + 1):
+					finifhedFileIds.append(str(newId))
+			else:
+				finifhedFileIds.append(fileId)
+
+
+		print(finifhedFileIds)
+
+
+
+
+		dataList = self.resources_manager.getFilesDataFromList(finifhedFileIds)
+		if len(dataList) == 0:
+			return self.wrongQuery()
+
+		root = ET.Element('root')
+		root.attrib = {'ID':'FILES'}
+
+		for tmpData in dataList:
+			fileNode = ET.SubElement(root,'file')
+			fileNode.attrib = {'name':tmpData['name']}
+			b64encodedImage = base64.b64encode(tmpData['data'])
+			fileNode.text = b64encodedImage.decode()
 		
-'''
+		xmlData = ET.tostring(root, encoding="utf-8")
+		return xmlData		

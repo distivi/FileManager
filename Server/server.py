@@ -6,7 +6,6 @@ import os
 import sys
 import string
 from re import match
-import pickle
 from api import *
 
 class MainServerSocket(asyncore.dispatcher):
@@ -31,22 +30,20 @@ class MainServerSocket(asyncore.dispatcher):
 class SecondaryServerSocket(asyncore.dispatcher_with_send):
   def __init__(self,socket_):
     super(SecondaryServerSocket,self).__init__(socket_)    
-    self.api_manger = Api(self)
+    self.api_manager = Api(self)
 
   def handle_read(self):
     receivedData = self.recv(1024**2)
     if receivedData:
-      self.api_manger.receiveData(receivedData)
+      self.api_manager.receiveData(receivedData)
     else:
       self.close()
 
   def send_data(self, data):
-    if type(data) == type(bytes("",'utf-8')):
-      print("Binary data ",data)
+    if type(data) == type(bytes("",'utf-8')):      
       self.send(data)
       self.send(bytes('','utf-8'))
-    else:
-      print(type(data))
+    else:      
       print("Can send not binary format")
 
   def handle_close(self):

@@ -80,10 +80,10 @@ class Client:
 			print("Exeption during executing XML file")
 
 	def parseHelpXML(self, root):
-		print('_'*90)
+		print('_'*115)
 		for child in root:
-			print('| ',child.tag.ljust(15),'| ',child.text.ljust(68),'|')
-		print('-'*90)
+			print('| ',child.tag.ljust(15),'| ',child.text.ljust(90),'|')
+		print('-'*115)
 
 	def parseFilesInfo(self, root):		
 		print('|',end="")		
@@ -110,7 +110,7 @@ class Client:
 			self.resources_mangaer.saveFile(b64denodedImage,fileNode.attrib['name'])
 
 	def userMenu(self):
-		print('For help info just send "help"')
+		print('For help info just send "help". To exit just write "exit"')
 		print('\n>>>', end="")
 		while True:
 			command = input()

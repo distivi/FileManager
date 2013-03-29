@@ -50,7 +50,7 @@ class Api:
 		nodeGetFilesInfo.text = "To get files info send string:\"files info\""
 		
 		nodeDownloadFiles = ET.SubElement(root,'download_files')
-		nodeDownloadFiles.text = "To download files send file's name or id separated by commas:"
+		nodeDownloadFiles.text = "To download files send file's name or id separated by commas. Example: \"1-4,5,cat.jpg\""
 		
 		xmlData = ET.tostring(root, encoding="utf-8")
 		return xmlData

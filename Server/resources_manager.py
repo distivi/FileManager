@@ -17,10 +17,11 @@ class ResourcesManager(object):
 		self.resourcesPath = os.path.join(os.getcwd(),self.resourcesDirName)
 		if not os.path.isdir(self.resourcesPath):
 			os.makedirs(self.resourcesPath)
+		self.getResourcesXMLData(True)
 
-	def getResourcesXMLData(self):		
+	def getResourcesXMLData(self, recreateXMLFile = False):		
 		xmlData = None			
-		if os.path.exists(os.path.join(os.getcwd(),self.resourcesXML)):
+		if os.path.exists(os.path.join(os.getcwd(),self.resourcesXML)) and not recreateXMLFile:
 			xmlFile = open(self.resourcesXML,'rb')
 			xmlData = xmlFile.read()
 			xmlFile.close()
